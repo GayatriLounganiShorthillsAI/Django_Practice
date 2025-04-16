@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+langchain = "*"
+langchain-openai = "*"
+python-dotenv = "*"
+streamlit = "*"
+tiktoken = "*"
+faiss-cpu = "*"
+langchain-experimental = "*"
+sentence-transformers = "*"
+django = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"
