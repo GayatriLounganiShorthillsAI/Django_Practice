@@ -15,6 +15,6 @@ def calculate():
 def say_hello(request):
         # return HttpResponse('Hello world')
         x = calculate()
-      
+        
         return render(request, 'hello.html', {'name' : 'Gayatri'})
  
