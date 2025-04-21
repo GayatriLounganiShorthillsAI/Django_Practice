@@ -14,6 +14,7 @@ langchain-experimental = "*"
 sentence-transformers = "*"
 django = "*"
 django-debug-toolbar = "*"
+mysqlclient = "*"
 
 [dev-packages]
 
