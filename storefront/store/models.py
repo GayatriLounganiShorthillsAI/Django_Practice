@@ -18,22 +18,23 @@ class Collection(models.Model):
 
 
 class Product(models.Model):
-        sku = models.CharField(max_length=10, primary_key=True)
+        # sku = models.CharField(max_length=10, primary_key=True)
         title = models.CharField(max_length=255)  #varchar 255
         slug = models.SlugField()
         description = models.TextField()
-        price = models.DecimalField(max_digits=6, decimal_places=2)
+        unit_price = models.DecimalField(max_digits=6, decimal_places=2)
         inventory = models.IntegerField()
         last_update = models.DateTimeField(auto_now_add= True)
         collection = models.ForeignKey('Collection', on_delete=models.PROTECT)
         promotions = models.ManyToManyField(Promotion)
-
+        
+    
 
 
 class Customer(models.Model):
         MEMBERSHIP_BRONZE = 'B'
-        # MEMBERSHIP_SILVER = 'S'
-        # MEMBERSHIP_GOLD = 'G'
+        MEMBERSHIP_SILVER = 'S'
+        MEMBERSHIP_GOLD = 'G'
         MEMBERSHIP_CHOICES = [
                 (MEMBERSHIP_BRONZE, 'Bronze'),
                 ('S', 'Silver'),
