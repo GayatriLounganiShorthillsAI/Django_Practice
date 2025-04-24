@@ -1,9 +1,11 @@
 from django.shortcuts import render
 # from django.http import HttpResponse
-from django.db.models import Q, F
+from django.db.models import Q, F, Value
 from django.core.exceptions import ObjectDoesNotExist
-from store.models import Product, OrderItem, Order
+from store.models import Product, OrderItem, Order, Customer
 from django.db.models.aggregates import Count, Max, Min, Avg
+
+
 
 # Create your views here.
 # req -> Response
@@ -72,6 +74,9 @@ def say_hello(request):
        
 
         # ******aggregate function*****
-        result = Product.objects.filter(collection__id = 5).aggregate(count = Count('id'), min_price = Min('unit_price'))
-        return render(request, 'hello.html', {'name' : 'Gayatri', 'result' : result})
+        # result = Product.objects.filter(collection__id = 5).aggregate(count = Count('id'), min_price = Min('unit_price'))
+
+        # ***** annotating objects***
+        queryset = Customer.objects.annotate(new_id = F('id')+1)
+        return render(request, 'hello.html', {'name' : 'Gayatri', 'result' : list(queryset)})
  
