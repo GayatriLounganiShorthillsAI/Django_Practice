@@ -5,7 +5,8 @@ from django.db.models.functions import Concat
 from django.core.exceptions import ObjectDoesNotExist
 from store.models import Product, OrderItem, Order, Customer
 from django.db.models.aggregates import Count, Max, Min, Avg
-
+from django.contrib.contenttypes.models import ContentType
+from tags.models import TaggedItem
 
 
 # Create your views here.
@@ -95,9 +96,27 @@ def say_hello(request):
         # )
 
         # *****working with expression wrappers***
-        discounted_price = ExpressionWrapper(F('unit_price') * 0.8, output_field=DecimalField())
-        queryset = Product.objects.annotate(
-                discounted_price = discounted_price
-        )
-        return render(request, 'hello.html', {'name' : 'Gayatri', 'result' : list(queryset)})
+        # discounted_price = ExpressionWrapper(F('unit_price') * 0.8, output_field=DecimalField())
+        # queryset = Product.objects.annotate(
+        #         discounted_price = discounted_price
+        # )
+
+
+        # ********querying generic relationships****
+        # content_type = ContentType.objects.get_for_model(Product)
+        # tag = TaggedItem.objects.filter(
+        #       content_type=content_type,
+        #       object_id=1
+        # ).select_related('tag')
+       
+        # return render(request, 'hello.html', {'name' : 'Gayatri', 'tags' : list(tag)})
+
+
+        # *********custom managers******
+        
+        # tag = TaggedItem.objects.get_tags_for(Product, 1)
+        # return render(request, 'hello.html', {'name' : 'Gayatri', 'tags' : list(tag)})
+
+        # *******understanding queryset cache*****
  
+        return render(request, 'hello.html', {'name' : 'Gayatri', 'tags' : list(tag)})
