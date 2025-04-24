@@ -1,6 +1,7 @@
 from django.shortcuts import render
 # from django.http import HttpResponse
-from django.db.models import Q, F, Value
+from django.db.models import Q, F, Value, Func
+from django.db.models.functions import Concat
 from django.core.exceptions import ObjectDoesNotExist
 from store.models import Product, OrderItem, Order, Customer
 from django.db.models.aggregates import Count, Max, Min, Avg
@@ -77,6 +78,18 @@ def say_hello(request):
         # result = Product.objects.filter(collection__id = 5).aggregate(count = Count('id'), min_price = Min('unit_price'))
 
         # ***** annotating objects***
-        queryset = Customer.objects.annotate(new_id = F('id')+1)
+        # queryset = Customer.objects.annotate(new_id = F('id')+1)
+
+
+        # *******calling database function****
+        # queryset = Customer.objects.annotate(
+        #         full_name = Func(F('first_name') , Value(' '), F('last_name'), function='CONCAT')
+        # )
+        # queryset = Customer.objects.annotate(
+        #         full_name = Concat('first_name' ,Value(' ') , 'last_name')
+        # )
+
+        # ****grouping data***
+        
         return render(request, 'hello.html', {'name' : 'Gayatri', 'result' : list(queryset)})
  
