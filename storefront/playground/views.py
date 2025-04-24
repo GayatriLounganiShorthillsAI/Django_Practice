@@ -118,5 +118,15 @@ def say_hello(request):
         # return render(request, 'hello.html', {'name' : 'Gayatri', 'tags' : list(tag)})
 
         # *******understanding queryset cache*****
- 
-        return render(request, 'hello.html', {'name' : 'Gayatri', 'tags' : list(tag)})
+        queryset = Product.objects.all()
+
+        # queryset[0] access element from cache
+        list(queryset)
+        queryset[0]
+
+        # there will be no cache
+
+        queryset[0]
+        list(queryset)
+        
+        return render(request, 'hello.html', {'name' : 'Gayatri', 'tags' : list(queryset)})
