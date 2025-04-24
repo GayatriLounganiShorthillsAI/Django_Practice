@@ -90,6 +90,8 @@ def say_hello(request):
         # )
 
         # ****grouping data***
-        
+        queryset = Customer.objects.annotate(
+                orders_count = Count('order')
+        )
         return render(request, 'hello.html', {'name' : 'Gayatri', 'result' : list(queryset)})
  
