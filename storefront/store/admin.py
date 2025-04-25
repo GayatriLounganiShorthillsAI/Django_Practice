@@ -5,10 +5,17 @@ from . import models
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
-        list_display = ['title', 'unit_price']
+        list_display = ['title', 'unit_price', 'inventory_status']
         list_editable = ['unit_price']
         list_per_page = 10
 
+# ****** ADDING COMPUTED COLUMNS*****
+        @admin.display(ordering='inventory')   # this decorator allows us to sort the computed column
+        def inventory_status(self, product):
+                if product.inventory < 10:
+                        return 'Low'
+                return 'OK'
+        
 @admin.register(models.Customer)
 class CustomerAdmin(admin.ModelAdmin):
         list_display = ['first_name', 'last_name', 'email', 'phone', 'birth_date', 'membership']
