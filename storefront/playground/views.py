@@ -7,7 +7,7 @@ from store.models import Product, OrderItem, Order, Customer, Collection
 from django.db.models.aggregates import Count, Max, Min, Avg
 from django.contrib.contenttypes.models import ContentType
 from tags.models import TaggedItem
-from django.db import transaction
+from django.db import transaction, connection
 
 # from rest_framework.generics import ListCreateAPIView
 
@@ -163,16 +163,28 @@ def say_hello(request):
         # collection = Collection.objects.filter(pk= 1).delete()
 
         # *****transactions*******
-        with transaction.atomic():
-                order = Order()
-                order.customer_id = 1
-                order.save()
+        # with transaction.atomic():
+        #         order = Order()
+        #         order.customer_id = 1
+        #         order.save()
 
-                item = OrderItem()
-                item.order = order
-                item.product_id = 1
-                item.quantity = 1
-                item.unit_price = 10
-                item.save()
+        #         item = OrderItem()
+        #         item.order = order
+        #         item.product_id = 1
+        #         item.quantity = 1
+        #         item.unit_price = 10
+        #         item.save()
 
-        return render(request, 'hello.html', {'name' : 'Gayatri', 'tags' : (item)})
+
+        # ********executing raw sql queries******
+
+        # queryset = Product.objects.raw('SELECT * FROM store_product')
+
+        # OR
+
+        with connection.cursor() as cursor:
+                cursor.execute('SELECT * FROM store_product')
+                # cursor.callproc('get_customers', [1,2,'a'])
+
+
+        return render(request, 'hello.html', {'name' : 'Gayatri', 'tags' : (cursor)})
