@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from . import models
 from django.db.models.aggregates import Count
 from django.utils.html import format_html, urlencode
@@ -26,6 +26,7 @@ class InventoryFilter(admin.SimpleListFilter):
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
+        actions = ['clear_inventory']
         list_display = ['title', 'unit_price', 'inventory_status', 'collection_title']
         list_editable = ['unit_price']
         list_filter = ['collection', 'last_update', InventoryFilter]
@@ -45,6 +46,16 @@ class ProductAdmin(admin.ModelAdmin):
                         return 'Low'
                 return 'OK'
         
+# ******adding custom actions*******8
+        @admin.action(description='Clear inventory')
+        def clear_inventory(self, request, queryset):
+                updated_count = queryset.update(inventory=0)
+                self.message_user(
+                        request,
+                        f'{updated_count} products were successfully updated',
+                        messages.SUCCESS
+                )
+
 
 
 @admin.register(models.Customer)
@@ -62,6 +73,7 @@ class CustomerAdmin(admin.ModelAdmin):
 class OrderAdmin(admin.ModelAdmin):
         list_display = ['id', 'placed_at', 'customer']
       
+
 
 @admin.register(models.Collection)
 class CollectionAdmin(admin.ModelAdmin):
