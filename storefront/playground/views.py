@@ -3,11 +3,11 @@ from django.shortcuts import render
 from django.db.models import Q, F, Value, Func, ExpressionWrapper , DecimalField
 from django.db.models.functions import Concat
 from django.core.exceptions import ObjectDoesNotExist
-from store.models import Product, OrderItem, Order, Customer
+from store.models import Product, OrderItem, Order, Customer, Collection
 from django.db.models.aggregates import Count, Max, Min, Avg
 from django.contrib.contenttypes.models import ContentType
 from tags.models import TaggedItem
-
+# from rest_framework.generics import ListCreateAPIView
 
 # Create your views here.
 # req -> Response
@@ -118,15 +118,25 @@ def say_hello(request):
         # return render(request, 'hello.html', {'name' : 'Gayatri', 'tags' : list(tag)})
 
         # *******understanding queryset cache*****
-        queryset = Product.objects.all()
+        # queryset = Product.objects.all()
 
-        # queryset[0] access element from cache
-        list(queryset)
-        queryset[0]
+        # # queryset[0] access element from cache
+        # list(queryset)
+        # queryset[0]
 
-        # there will be no cache
+        # # there will be no cache
 
-        queryset[0]
-        list(queryset)
+        # queryset[0]
+        # list(queryset)
         
-        return render(request, 'hello.html', {'name' : 'Gayatri', 'tags' : list(queryset)})
+
+        # ******creating objects*******
+        collection = Collection()
+        collection.title = 'Video_games'
+        collection.featured_product = Product(pk = 1)
+        # collection.featured_product_id = 1
+        collection.save()
+
+        # or modern approach but "title" won't change if its name is changed in making models
+        # collection = Collection.objects.create(title='a' , featured_product_id=1)
+        return render(request, 'hello.html', {'name' : 'Gayatri', 'tags' : (collection)})
