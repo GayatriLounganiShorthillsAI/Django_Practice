@@ -7,6 +7,8 @@ from store.models import Product, OrderItem, Order, Customer, Collection
 from django.db.models.aggregates import Count, Max, Min, Avg
 from django.contrib.contenttypes.models import ContentType
 from tags.models import TaggedItem
+from django.db import transaction
+
 # from rest_framework.generics import ListCreateAPIView
 
 # Create your views here.
@@ -18,6 +20,8 @@ def calculate():
         x = 1
         y = 2
         return x
+
+
 
 def say_hello(request):
         # return HttpResponse('Hello world')
@@ -131,12 +135,44 @@ def say_hello(request):
         
 
         # ******creating objects*******
-        collection = Collection()
-        collection.title = 'Video_games'
-        collection.featured_product = Product(pk = 1)
-        # collection.featured_product_id = 1
-        collection.save()
+        # collection = Collection()
+        # collection.title = 'Video_games'
+        # collection.featured_product = Product(pk = 1)
+        # # collection.featured_product_id = 1
+        # collection.save()
 
         # or modern approach but "title" won't change if its name is changed in making models
         # collection = Collection.objects.create(title='a' , featured_product_id=1)
-        return render(request, 'hello.html', {'name' : 'Gayatri', 'tags' : (collection)})
+
+
+        # *******updating objects******
+        # collection = Collection(pk = 1)
+        # collection.title = 'hello'
+        # collection.featured_product = None
+        # # collection.featured_product_id = 1
+        # collection.save()
+
+
+        # collection = Collection.objects.filter(pk=1).update(featured_product = None)
+
+
+        # ******deleting objects*****
+        # collection = Collection(pk = 1)
+        # collection.delete()
+
+        # collection = Collection.objects.filter(pk= 1).delete()
+
+        # *****transactions*******
+        with transaction.atomic():
+                order = Order()
+                order.customer_id = 1
+                order.save()
+
+                item = OrderItem()
+                item.order = order
+                item.product_id = 1
+                item.quantity = 1
+                item.unit_price = 10
+                item.save()
+
+        return render(request, 'hello.html', {'name' : 'Gayatri', 'tags' : (item)})
